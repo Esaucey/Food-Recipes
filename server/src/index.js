@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import "dotenv/config";
 
 import { userRouter } from "./routes/user.js"
 
@@ -11,12 +12,16 @@ app.use(cors());
 
 app.use("/auth", userRouter)
 
+
 mongoose.connect(
-  "mongodb+srv://mermer:mermer123@cluster0.wzql9o7.mongodb.net/recipes?retryWrites=true&w=majority",
+  process.env.CONNECTION_URL,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }
-);
+).then(() => {
+  app.listen(3001, () => console.log("server is running"))
+}).catch((error) => {
+  console.log(error.message)
+});
 
-app.listen(3001, () => console.log("server is running"))
